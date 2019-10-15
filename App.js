@@ -6,17 +6,7 @@
  * @flow
  */
 import React from 'react'
-import {
-  Button,
-  View,
-  Text,
-  TextInput,
-  TouchableHighlight,
-  Alert,
-  ActivityIndicator,
-  StyleSheet,
-  Image,
-} from 'react-native'
+import {Button, View, Text, StyleSheet} from 'react-native'
 import {createAppContainer, NavigationProp} from 'react-navigation'
 import {createStackNavigator} from 'react-navigation-stack'
 import HomeScreen from './home'
@@ -32,7 +22,7 @@ class RandomParamScreen extends React.Component<NavigationProp, {}> {
   render() {
     const {navigation} = this.props
     return (
-      <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+      <View style={[styles.container]}>
         <Text>RandomParam</Text>
         <Text>
           item.id: {JSON.stringify(navigation.getParam('itemId', 'NO-ID'))}
@@ -42,7 +32,7 @@ class RandomParamScreen extends React.Component<NavigationProp, {}> {
           {JSON.stringify(navigation.getParam('otherParam', 'default value'))}
         </Text>
         <Button
-          title="Go to Items..."
+          title='Go to Items...'
           onPress={() =>
             navigation.push('RandomParam', {
               itemId: Math.floor(Math.random() * 100),
@@ -50,13 +40,21 @@ class RandomParamScreen extends React.Component<NavigationProp, {}> {
           }
         />
         <Button
-          title="Update the title"
+          title='Update the title'
           onPress={() => navigation.setParams({otherParam: 'Update'})}
         />
       </View>
     )
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+})
 
 const AppNavigator = createStackNavigator(
   {

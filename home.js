@@ -1,20 +1,19 @@
-import React, {Component} from 'react'
+import React from 'react'
 import {
   View,
   Text,
-  Image,
   StyleSheet,
   Button,
   TextInput,
   TouchableNativeFeedback,
-  Picker
+  Picker,
 } from 'react-native'
 import {NavigationProp} from 'react-navigation'
 
 class InputTitle extends React.Component<{}, {value: string}> {
   state = {
     value: 'Placeholder',
-    language: ''
+    language: '',
   }
 
   onChangeText = text => {
@@ -42,8 +41,8 @@ class HomeScreen extends React.Component<NavigationProp, {count: number}> {
       headerRight: (
         <Button
           onPress={navigation.getParam('increaseCount')}
-          title="+1"
-          color="#666"
+          title='+1'
+          color='#666'
         />
       ),
     }
@@ -69,12 +68,12 @@ class HomeScreen extends React.Component<NavigationProp, {count: number}> {
         <TouchableNativeFeedback
           onPress={this._onPressButton}
           background={TouchableNativeFeedback.SelectableBackground()}>
-          <View style={{backgroundColor: 'rgb(33, 150, 243)', margin: 5}}>
+          <View style={[styles.touchSomeBackgroundColor]}>
             <Text style={[styles.buttonText]}>go to Movies</Text>
           </View>
         </TouchableNativeFeedback>
         <Button
-          title="go to RandomParam"
+          title='go to RandomParam'
           onPress={() =>
             this.props.navigation.navigate('RandomParam', {
               itemId: 86,
@@ -84,12 +83,12 @@ class HomeScreen extends React.Component<NavigationProp, {count: number}> {
         />
         <Picker
           selectedValue={this.state.language}
-          style={{height: 50, width: 100}}
+          style={[styles.picker]}
           onValueChange={(itemValue, itemIndex) =>
             this.setState({language: itemValue})
           }>
-          <Picker.Item label="Java" value="java" />
-          <Picker.Item label="JavaScript" value="js" />
+          <Picker.Item label='Java' value='java' />
+          <Picker.Item label='JavaScript' value='js' />
         </Picker>
       </View>
     )
@@ -111,6 +110,10 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: 'center',
   },
+  touchSomeBackgroundColor: {
+    backgroundColor: 'rgb(33, 150, 243)',
+    margin: 5,
+  },
   titleInput: {
     height: 40,
     borderColor: 'gray',
@@ -125,6 +128,10 @@ const styles = StyleSheet.create({
     color: 'white',
     padding: 8,
     fontWeight: '500',
+  },
+  picker: {
+    height: 50,
+    width: 100,
   },
 })
 

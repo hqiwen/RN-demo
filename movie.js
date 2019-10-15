@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React from 'react'
 import {
   View,
   Text,
@@ -7,16 +7,17 @@ import {
   StyleSheet,
   ActivityIndicator,
   TouchableHighlight,
-  Alert,
-  RefreshControl
+  RefreshControl,
 } from 'react-native'
 import {withNavigation, NavigationProp} from 'react-navigation'
 
 const REQUEST_URL =
   'https://raw.githubusercontent.com/facebook/react-native/0.51-stable/docs/MoviesExample.json'
 
-class MoviesScreen extends Component<NavigationProp, {data: [], loaded: boolean,}> {
-
+class MoviesScreen extends React.Component<
+  NavigationProp,
+  {data: [], loaded: boolean},
+> {
   static navigationOptions = ({navigation}) => {
     return {
       headerTitle: '电影列表',
@@ -28,7 +29,7 @@ class MoviesScreen extends Component<NavigationProp, {data: [], loaded: boolean,
     this.state = {
       data: [],
       loaded: false,
-      refreshing: false
+      refreshing: false,
     }
   }
 
@@ -47,7 +48,7 @@ class MoviesScreen extends Component<NavigationProp, {data: [], loaded: boolean,
         this.setState({
           data: this.state.data.concat(responseDate.movies),
           loaded: true,
-          refreshing: false
+          refreshing: false,
         })
       })
   }
@@ -75,7 +76,7 @@ class MoviesScreen extends Component<NavigationProp, {data: [], loaded: boolean,
         data={this.state.data}
         renderItem={this.renderMovie}
         style={styles.list}
-        keyExtractor={item => item.id + Math.random() * 50 }
+        keyExtractor={item => item.id + Math.random() * 50}
         refreshControl={
           <RefreshControl
             refreshing={this.state.refreshing}
@@ -89,7 +90,7 @@ class MoviesScreen extends Component<NavigationProp, {data: [], loaded: boolean,
   renderLoadingView() {
     return (
       <View style={styles.container}>
-        <ActivityIndicator size="large" color="#0000ff" />
+        <ActivityIndicator size='large' color='#0000ff' />
       </View>
     )
   }
@@ -103,11 +104,12 @@ class MoviesScreen extends Component<NavigationProp, {data: [], loaded: boolean,
           onPress={() => {
             this._onPressButton(itemId, imageURL)
           }}
-          underlayColor="white">
+          underlayColor='white'>
           <View style={styles.container}>
             <Image
               source={{uri: item.posters.thumbnail}}
-              style={styles.thumbnail}></Image>
+              style={styles.thumbnail}
+            />
             <View style={styles.rightContainer}>
               <Text style={styles.title}>{item.title}</Text>
               <Text style={styles.year}>{item.year}</Text>
@@ -126,7 +128,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
-    margin: 10
+    margin: 10,
   },
   rightContainer: {
     flex: 1,

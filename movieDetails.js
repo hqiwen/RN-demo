@@ -1,12 +1,6 @@
-import React, {Component} from 'react'
-import {
-  View,
-  Text,
-  Image,
-  StyleSheet,
-  ActivityIndicator,
-} from 'react-native'
-import {withNavigation, NavigationProp} from 'react-navigation'
+import React from 'react'
+import {View, Text, Image, StyleSheet, ActivityIndicator} from 'react-native'
+import {NavigationProp} from 'react-navigation'
 
 type MovieDetailsState = {
   title: string,
@@ -75,22 +69,28 @@ class MovieDetailsScreen extends React.Component<
 
     return (
       <View style={[styles.container]}>
-        <View style={{flexDirection:'row'}}>
+        <View style={[styles.header]}>
           <Image
             source={{uri: navigation.getParam('imageURL', '')}}
             resizeMode='contain'
             style={[styles.thumbnail]}
           />
-          <View style={{flex: 2,alignItems: 'center',  justifyContent: 'center'}}>
+          <View style={[styles.container]}>
             <Text style={[styles.textBold]}>
               item.id: {navigation.getParam('itemId', 'NO-ID')}
             </Text>
             <Text style={[styles.textBold]}>商品名称：{this.state.title}</Text>
-            <Text style={[styles.textBold]}>价格：<Text style={{color: 'red'}}>{this.state.price}</Text></Text>
+            <Text style={[styles.textBold]}>
+              价格：
+              <Text style={[styles.textRedColor]}>{this.state.price}</Text>
+            </Text>
           </View>
         </View>
         <View style={{margin: 20}}>
-          <Text style={[styles.textBold]}>描述：<Text style={{fontWeight: 'normal'}}>{this.state.description}</Text></Text>
+          <Text style={[styles.textBold]}>
+            描述：
+            <Text style={[styles.textNormal]}>{this.state.description}</Text>
+          </Text>
         </View>
       </View>
     )
@@ -99,7 +99,7 @@ class MovieDetailsScreen extends React.Component<
   renderLoadingView() {
     return (
       <View style={styles.container}>
-        <ActivityIndicator size="large" color="#0000ff" />
+        <ActivityIndicator size='large' color='#0000ff' />
       </View>
     )
   }
@@ -110,15 +110,31 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#F5FCFF',
   },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    margin: 20,
+  },
+  rightContainer: {
+    flex: 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   thumbnail: {
     width: 120,
     height: 160,
     flex: -1,
-    margin: 20
+    marginRight: 20,
+  },
+  textRedColor: {
+    color: 'red',
   },
   textBold: {
-    fontWeight: 'bold'
-  }
+    fontWeight: 'bold',
+  },
+  textNormal: {
+    fontWeight: 'normal',
+  },
 })
 
 export default MovieDetailsScreen
