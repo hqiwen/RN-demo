@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component} from 'react'
 import {
   View,
   Text,
@@ -7,31 +7,39 @@ import {
   StyleSheet,
   ActivityIndicator,
   TouchableHighlight,
-  Alert
-} from 'react-native';
-import { withNavigation } from 'react-navigation';
+  Alert,
+  RefreshControl
+} from 'react-native'
+import {withNavigation, NavigationProp} from 'react-navigation'
 
 const REQUEST_URL =
-  'https://raw.githubusercontent.com/facebook/react-native/0.51-stable/docs/MoviesExample.json';
+  'https://raw.githubusercontent.com/facebook/react-native/0.51-stable/docs/MoviesExample.json'
 
-class Movies extends Component {
+class MoviesScreen extends Component<NavigationProp, {data: [], loaded: boolean,}> {
+
+  static navigationOptions = ({navigation}) => {
+    return {
+      headerTitle: '电影列表',
+    }
+  }
+
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       data: [],
       loaded: false,
-    };
+      refreshing: false
+    }
   }
 
   componentDidMount() {
-    this.fetchData();
-    console.log(this.state.data)
+    this.fetchData()
   }
 
   componentWillUnmount() {
-    this.setState({ data: [] })
+    this.setState({data: []})
   }
-  
+
   fetchData = () => {
     fetch(REQUEST_URL)
       .then(res => res.json())
@@ -39,20 +47,27 @@ class Movies extends Component {
         this.setState({
           data: this.state.data.concat(responseDate.movies),
           loaded: true,
-        });
-      });
+          refreshing: false
+        })
+      })
   }
 
-  _onPressButton = (e, itemId) => {
+  _onPressButton = (itemId, imageURL) => {
+    console.log(itemId)
     this.props.navigation.navigate('MovieDetails', {
-      itemId: itemId
-    });
+      itemId: itemId,
+      imageURL: imageURL,
+    })
   }
 
+  _onRefresh = () => {
+    this.setState({refreshing: true})
+    this.fetchData()
+  }
 
   render() {
     if (!this.state.loaded) {
-      return this.renderLoadingView();
+      return this.renderLoadingView()
     }
 
     return (
@@ -60,9 +75,15 @@ class Movies extends Component {
         data={this.state.data}
         renderItem={this.renderMovie}
         style={styles.list}
-        keyExtractor={item => item.id}
+        keyExtractor={item => item.id + Math.random() * 50 }
+        refreshControl={
+          <RefreshControl
+            refreshing={this.state.refreshing}
+            onRefresh={this._onRefresh}
+          />
+        }
       />
-    );
+    )
   }
 
   renderLoadingView() {
@@ -70,13 +91,19 @@ class Movies extends Component {
       <View style={styles.container}>
         <ActivityIndicator size="large" color="#0000ff" />
       </View>
-    );
+    )
   }
 
   renderMovie = ({item}) => {
+    const itemId = item.id
+    const imageURL = item.posters.thumbnail
     return (
       <View>
-        <TouchableHighlight onPress={(e, itemId) => this._onPressButton(e, itemId)} underlayColor="white">
+        <TouchableHighlight
+          onPress={() => {
+            this._onPressButton(itemId, imageURL)
+          }}
+          underlayColor="white">
           <View style={styles.container}>
             <Image
               source={{uri: item.posters.thumbnail}}
@@ -88,7 +115,7 @@ class Movies extends Component {
           </View>
         </TouchableHighlight>
       </View>
-    );
+    )
   }
 }
 
@@ -99,6 +126,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
+    margin: 10
   },
   rightContainer: {
     flex: 1,
@@ -119,6 +147,6 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     backgroundColor: '#F5FCFF',
   },
-});
+})
 
-export default withNavigation(Movies)
+export default withNavigation(MoviesScreen)
