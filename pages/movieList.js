@@ -11,7 +11,7 @@ import {
 } from 'react-native'
 import {withNavigation, NavigationProp} from 'react-navigation'
 import {connect} from 'react-redux'
-import {fetchMoviesIfNeeded, REFRESH_MOVIES} from './store/actions'
+import {fetchMoviesIfNeeded, REFRESH_MOVIES} from '../store/actions'
 
 class MoviesScreen extends React.Component<
   NavigationProp,
