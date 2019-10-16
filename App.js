@@ -12,6 +12,9 @@ import {createStackNavigator} from 'react-navigation-stack'
 import HomeScreen from './home'
 import MoviesScreen from './movie'
 import MovieDetailsScreen from './movieDetails'
+import {Provider} from 'react-redux'
+import configureStore from './store/store'
+const store = configureStore()
 
 class RandomParamScreen extends React.Component<NavigationProp, {}> {
   static navigationOptions = ({navigation}) => {
@@ -81,6 +84,10 @@ const AppContainer = createAppContainer(AppNavigator)
 
 export default class App extends React.Component<{}, {}> {
   render() {
-    return <AppContainer />
+    return (
+      <Provider store={store}>
+        <AppContainer />
+      </Provider>
+    )
   }
 }

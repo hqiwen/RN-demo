@@ -42,16 +42,6 @@ class MovieDetailsScreen extends React.Component<
         'withNavigation 是一个高阶组件，它可以将navigation这个 prop 传递到一个包装的组件。当你无法直接将navigation 这个 prop 传递给组件，或者不想在深度嵌套的子组件中传递它时，它将非常有用.',
       price: 5,
     }
-    // fetch('url')
-    //   .then(res => res.json())
-    //   .then((responseDate: MovieDetailsState) => {
-    //     this.setState({
-    //       title: responseDate.title,
-    //       price: responseDate.price,
-    //       description: responseDate.description,
-    //       loaded: true,
-    //     })
-    //   })
     this.setState({
       title: responseDate.title,
       price: responseDate.price,

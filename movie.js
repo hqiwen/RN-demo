@@ -10,13 +10,12 @@ import {
   RefreshControl,
 } from 'react-native'
 import {withNavigation, NavigationProp} from 'react-navigation'
-
-const REQUEST_URL =
-  'https://raw.githubusercontent.com/facebook/react-native/0.51-stable/docs/MoviesExample.json'
+import {connect} from 'react-redux'
+import {fetchMoviesIfNeeded, REFRESH_MOVIES} from './store/actions'
 
 class MoviesScreen extends React.Component<
   NavigationProp,
-  {data: [], loaded: boolean},
+  {data: [], loaded: boolean, refreshing: boolean},
 > {
   static navigationOptions = ({navigation}) => {
     return {
@@ -26,35 +25,14 @@ class MoviesScreen extends React.Component<
 
   constructor(props) {
     super(props)
-    this.state = {
-      data: [],
-      loaded: false,
-      refreshing: false,
-    }
   }
 
   componentDidMount() {
-    this.fetchData()
-  }
-
-  componentWillUnmount() {
-    this.setState({data: []})
-  }
-
-  fetchData = () => {
-    fetch(REQUEST_URL)
-      .then(res => res.json())
-      .then(responseDate => {
-        this.setState({
-          data: this.state.data.concat(responseDate.movies),
-          loaded: true,
-          refreshing: false,
-        })
-      })
+    const {dispatch} = this.props
+    dispatch(fetchMoviesIfNeeded())
   }
 
   _onPressButton = (itemId, imageURL) => {
-    console.log(itemId)
     this.props.navigation.navigate('MovieDetails', {
       itemId: itemId,
       imageURL: imageURL,
@@ -62,26 +40,25 @@ class MoviesScreen extends React.Component<
   }
 
   _onRefresh = () => {
-    this.setState({refreshing: true})
-    this.fetchData()
+    const {dispatch} = this.props
+    dispatch({type: REFRESH_MOVIES})
+    dispatch(fetchMoviesIfNeeded())
   }
 
   render() {
-    if (!this.state.loaded) {
+    const {loaded, data, refreshing} = this.props
+    if (!loaded) {
       return this.renderLoadingView()
     }
 
     return (
       <FlatList
-        data={this.state.data}
+        data={data}
         renderItem={this.renderMovie}
         style={styles.list}
         keyExtractor={item => item.id + Math.random() * 50}
         refreshControl={
-          <RefreshControl
-            refreshing={this.state.refreshing}
-            onRefresh={this._onRefresh}
-          />
+          <RefreshControl refreshing={refreshing} onRefresh={this._onRefresh} />
         }
       />
     )
@@ -121,6 +98,19 @@ class MoviesScreen extends React.Component<
   }
 }
 
+function mapStateToProps(state) {
+  const {movies} = state
+  const {data, loaded} = movies || {
+    loaded: false,
+    data: [],
+  }
+
+  return {
+    data,
+    loaded,
+  }
+}
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -151,4 +141,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default withNavigation(MoviesScreen)
+export default connect(mapStateToProps)(withNavigation(MoviesScreen))
